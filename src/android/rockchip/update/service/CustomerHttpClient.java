@@ -34,10 +34,12 @@ public class CustomerHttpClient {
             HttpProtocolParams.setUseExpectContinue(params, true);
             HttpProtocolParams.setUserAgent(params, "rk29sdk/4.0");
             ConnManagerParams.setMaxTotalConnections(params, 100);
-            ConnPerRouteBean connPerRoute = new ConnPerRouteBean(20);
-            HttpHost localhost = new HttpHost("locahost", 80);
-            connPerRoute.setMaxForRoute(new HttpRoute(localhost), 50);
-            ConnManagerParams.setMaxConnectionsPerRoute(params, connPerRoute);
+            ConnManagerParams.setMaxConnectionsPerRoute(params, new ConnPerRoute() {
+                @Override
+                public int getMaxForRoute(HttpRoute route) {
+                    return 15;
+                }
+            });
             ConnManagerParams.setTimeout(params, 10000);
             HttpConnectionParams.setConnectionTimeout(params, 20000);
             HttpConnectionParams.setSoTimeout(params, 20000);
